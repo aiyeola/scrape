@@ -3,11 +3,14 @@ require("dotenv").config();
 const process = require("node:process");
 const redis = require("redis");
 const cron = require("node-cron");
+const express = require("express");
+const app = express();
 
 const { crawlData } = require("./crawler");
 const { sendMail } = require("./mail");
 
 const KEY = "news";
+const port = process.env.PORT || 3000;
 
 const getTrendingNews = async () => {
   try {
@@ -45,3 +48,11 @@ const getTrendingNews = async () => {
 };
 
 cron.schedule("*/30 5-20 * * 1-5", () => getTrendingNews());
+
+app.get("/", (_req, res) => {
+  res.send("App is running");
+});
+
+app.listen(port, () => {
+  console.log(`app listening on port ${port}`);
+});
