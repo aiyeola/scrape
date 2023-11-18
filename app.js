@@ -53,6 +53,7 @@ const getTrendingNews = async () => {
 cron.schedule("*/30 5-20 * * 1-5", () => getTrendingNews());
 
 app.get("/", (_req, res) => {
+  console.log("app is running: ping");
   res.send("App is running");
 });
 
