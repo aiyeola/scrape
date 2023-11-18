@@ -1,0 +1,13 @@
+{
+  "name": "mimi-scrape",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "node-cron": "^3.0.3",
+    "puppeteer": "^21.5.2",
+    "redis": "^4.6.10",
+    "resend": "^2.0.0"
+  }
+}
