@@ -25,4 +25,5 @@ const formatMail = (data) => {
     return "<p>no new posts</p>";
   }
 };
+
 module.exports = { sendMail, formatMail };

@@ -6,6 +6,7 @@ const cron = require("node-cron");
 const express = require("express");
 
 const { crawlData } = require("./crawler");
+const { makeRequest } = require("./ping");
 const { sendMail, formatMail } = require("./mail");
 
 const KEY = "news";
@@ -50,7 +51,9 @@ const getTrendingNews = async () => {
   }
 };
 
-cron.schedule("*/30 5-20 * * 1-5", () => getTrendingNews());
+cron.schedule("*/30 5-20 * * 1-5", getTrendingNews);
+
+cron.schedule("*/14 * * * *", makeRequest);
 
 app.get("/", (_req, res) => {
   console.log("app is running: ping");
