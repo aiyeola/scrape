@@ -4,13 +4,14 @@ const process = require("node:process");
 const redis = require("redis");
 const cron = require("node-cron");
 const express = require("express");
-const app = express();
 
 const { crawlData } = require("./crawler");
-const { sendMail } = require("./mail");
+const { sendMail, formatMail } = require("./mail");
 
 const KEY = "news";
 const port = process.env.PORT || 3000;
+
+const app = express();
 
 const getTrendingNews = async () => {
   try {
@@ -37,7 +38,9 @@ const getTrendingNews = async () => {
       ({ link: link1 }) => !newsInDb.some(({ link: link2 }) => link2 === link1)
     );
 
-    sendMail(difference);
+    const html = formatMail(difference);
+
+    sendMail(html);
 
     await client.disconnect();
 
