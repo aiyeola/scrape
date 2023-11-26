@@ -10,7 +10,7 @@ const { makeRequest } = require("./ping");
 const { sendMail, formatMail } = require("./mail");
 
 const KEY = "news";
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 
 const app = express();
 
@@ -50,10 +50,11 @@ const getTrendingNews = async () => {
     console.log("script error: ", error);
   }
 };
+// getTrendingNews()
 
 cron.schedule("*/30 5-20 * * 1-5", getTrendingNews);
 
-cron.schedule("*/14 * * * *", makeRequest);
+// cron.schedule("*/14 * * * *", makeRequest);
 
 app.get("/", (_req, res) => {
   console.log("app is running: ping");
