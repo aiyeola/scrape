@@ -6,8 +6,8 @@ const cron = require("node-cron");
 const express = require("express");
 
 const { crawlData } = require("./crawler");
-const { makeRequest } = require("./ping");
-const { sendMail, formatMail } = require("./mail");
+// const { makeRequest } = require("./ping");
+// const { sendMail, formatMail } = require("./mail");
 
 const KEY = "news";
 const port = process.env.PORT || 8080;
