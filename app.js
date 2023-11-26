@@ -16,32 +16,34 @@ const app = express();
 
 const getTrendingNews = async () => {
   try {
-    const client = await redis
-      .createClient({
-        password: process.env.REDIS_PASSWORD,
-        socket: {
-          host: process.env.REDIS_HOST,
-          port: process.env.REDIS_PORT,
-        },
-      })
-      .on("error", (err) => console.log("Redis Client Error", err))
-      .connect();
+    // const client = await redis
+    //   .createClient({
+    //     password: process.env.REDIS_PASSWORD,
+    //     socket: {
+    //       host: process.env.REDIS_HOST,
+    //       port: process.env.REDIS_PORT,
+    //     },
+    //   })
+    //   .on("error", (err) => console.log("Redis Client Error", err))
+    //   .connect();
 
     const news = await crawlData();
+    console.log('news: ', news);
 
-    const value = await client.get(KEY);
+//     const value = await client.get(KEY);
+// 
+//     await client.set(KEY, JSON.stringify(news));
+// 
+//     const newsInDb = JSON.parse(value);
+// 
+//     const difference = news.filter(
+//       ({ link: link1 }) => !newsInDb.some(({ link: link2 }) => link2 === link1)
+//     );
+// 
+//     const html = formatMail(difference);
+//     
 
-    await client.set(KEY, JSON.stringify(news));
-
-    const newsInDb = JSON.parse(value);
-
-    const difference = news.filter(
-      ({ link: link1 }) => !newsInDb.some(({ link: link2 }) => link2 === link1)
-    );
-
-    const html = formatMail(difference);
-
-    sendMail(html);
+    // sendMail(html);
 
     await client.disconnect();
 
@@ -50,7 +52,6 @@ const getTrendingNews = async () => {
     console.log("script error: ", error);
   }
 };
-// getTrendingNews()
 
 cron.schedule("*/30 5-20 * * 1-5", getTrendingNews);
 
