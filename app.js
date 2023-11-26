@@ -45,7 +45,7 @@ const getTrendingNews = async () => {
 
     // sendMail(html);
 
-    await client.disconnect();
+    // await client.disconnect();
 
     console.log("This script ran for", process.uptime(), "seconds");
   } catch (error) {
