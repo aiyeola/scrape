@@ -54,8 +54,6 @@ const getTrendingNews = async () => {
   }
 };
 
-getTrendingNews();
-
 app.use(
   cookieSession({
     name: "session",
