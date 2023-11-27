@@ -17,21 +17,20 @@ const port = process.env.PORT || 8080;
 
 const app = express();
 
-const client = redis
-  .createClient({
-    password: process.env.REDIS_PASSWORD,
-    socket: {
-      host: process.env.REDIS_HOST,
-      port: process.env.REDIS_PORT,
-    },
-  })
-  .on("error", (err) => console.log("Redis Client Error", err))
-  .connect();
-
 const getTrendingNews = async () => {
   try {
+    const client = redis
+      .createClient({
+        password: process.env.REDIS_PASSWORD,
+        socket: {
+          host: process.env.REDIS_HOST,
+          port: process.env.REDIS_PORT,
+        },
+      })
+      .on("error", (err) => console.log("Redis Client Error", err))
+      .connect();
+
     const news = await crawlData();
-    console.log('news: ', news);
 
     const value = await client.get(KEY);
 
@@ -47,13 +46,13 @@ const getTrendingNews = async () => {
 
     sendMail(html);
 
+    await client.disconnect();
+
     console.log("This script ran for", process.uptime(), "seconds");
   } catch (error) {
-    await client.disconnect();
     console.log("script error: ", error);
   }
 };
-
 
 getTrendingNews();
 
