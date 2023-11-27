@@ -31,6 +31,7 @@ const client = redis
 const getTrendingNews = async () => {
   try {
     const news = await crawlData();
+    console.log('news: ', news);
 
     const value = await client.get(KEY);
 
@@ -53,7 +54,8 @@ const getTrendingNews = async () => {
   }
 };
 
-// getTrendingNews();
+
+getTrendingNews();
 
 app.use(
   cookieSession({
@@ -63,7 +65,7 @@ app.use(
   })
 );
 
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   console.log("app is running: ping");
   res.send("App is running");
 });
@@ -80,6 +82,6 @@ app.listen(port, () => {
   console.log(`app listening on port ${port}`);
 });
 
-cron.schedule("*/30 5-20 * * 1-5", getTrendingNews);
+cron.schedule("*/30 4-19 * * 1-5", getTrendingNews);
 
 cron.schedule("*/14 * * * *", makeRequest);
