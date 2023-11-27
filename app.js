@@ -19,7 +19,7 @@ const app = express();
 
 const getTrendingNews = async () => {
   try {
-    const client = redis
+    const client = await redis
       .createClient({
         password: process.env.REDIS_PASSWORD,
         socket: {
