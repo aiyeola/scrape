@@ -10,7 +10,7 @@ const cookieSession = require("cookie-session");
 const { crawlData } = require("./crawler");
 const { makeRequest } = require("./ping");
 const { sendMail, formatMail } = require("./mail");
-const { login, callback, postTweet, refreshToken } = require("./handlers");
+const { login, callback, postTweet, refreshToken, pushTweetToTwitter } = require("./handlers");
 
 const KEY = "news";
 const port = process.env.PORT || 8080;
@@ -45,6 +45,7 @@ const getTrendingNews = async () => {
     const html = formatMail(difference);
 
     sendMail(html);
+    pushTweetToTwitter(difference);
 
     await client.disconnect();
 
@@ -74,6 +75,8 @@ app.get("/callback", callback);
 app.get("/post_tweet", postTweet);
 
 app.get("/refresh", refreshToken);
+
+app.get("/getTrendingNews", getTrendingNews);
 
 app.listen(port, () => {
   console.log(`app listening on port ${port}`);

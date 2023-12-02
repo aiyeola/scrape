@@ -51,11 +51,20 @@ async function callback(req, res) {
 }
 
 async function postTweet(req, res) {
-  //   const twitterApi = new TwitterApi(
-  //     "Bearer c0tqcnBqUDEyUDdqaGJwZjV3bDBoODdjV2x6NXNGX0hhYTF6dEhWcHlpX1V4OjE3MDEwNDYxOTAwNjU6MToxOmF0OjE"
-  //   );
+  
+  const twitterApi = new TwitterApi({
+    appKey: process.env.API_KEY,
+    appSecret: process.env.API_KEY_SECRET,
+    accessToken: process.env.ACCESS_TOKEN,
+    accessSecret: process.env.ACCESS_TOKEN_SECRET,
+  });
 
-  const dd = await client.currentUserV2();
+  const rwClient = twitterApi.readWrite;
+  const dd = await twitterApi.v2.tweet(
+    "New post Hello, this is a test 1. \n https://mimi-scrape.onrender.com/\n\n Hello, this is a test 2. \n https://mimi-scrape.onrender.com/"
+  );
+  // // const dd = await twitterApi.v2.tweet('Hello, this is a test.');
+
   console.log("dd: ", dd);
   //   const { data: createdTweet } = await twitterApi.v2.readWrite.tweet(
   //     "twitter-api-v2 is awesome!",
@@ -68,6 +77,33 @@ async function postTweet(req, res) {
   //   );
   //   console.log("Tweet", createdTweet.id, ":", createdTweet.text);
 }
+
+const pushTweetToTwitter = async (data) => {
+  if (data.length) {
+    let i = 0;
+    const twitterApi = new TwitterApi({
+      appKey: process.env.API_KEY,
+      appSecret: process.env.API_KEY_SECRET,
+      accessToken: process.env.ACCESS_TOKEN,
+      accessSecret: process.env.ACCESS_TOKEN_SECRET,
+    });
+
+    const rwClient = twitterApi.readWrite;
+    // const dd = await twitterApi.v2.tweet('New post Hello, this is a test 1. \n https://mimi-scrape.onrender.com/\n\n Hello, this is a test 2. \n https://mimi-scrape.onrender.com/');
+    
+    // console.log("dd: ", dd);
+
+    let timerId = setInterval(async () => {
+      let { link, title } = data[i];
+      await twitterApi.v2.tweet(`${title} \n ${link}`);
+
+      i = i + 1;
+      if (i >= data.length) {
+        clearInterval(timerId);
+      }
+    }, 30000);
+  }
+};
 
 async function refreshToken(req, res) {
   const client = new TwitterApi({
@@ -93,6 +129,7 @@ module.exports = {
   callback,
   postTweet,
   refreshToken,
+  pushTweetToTwitter
 };
 // const authClient = new auth.OAuth2User({
 //   client_id: process.env.CLIENT_ID,
