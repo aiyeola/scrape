@@ -4,12 +4,11 @@ const process = require("node:process");
 const redis = require("redis");
 const cron = require("node-cron");
 const express = require("express");
-const cookieSession = require("cookie-session");
 
 const { crawlData } = require("./crawler");
 const { makeRequest } = require("./ping");
 const { sendMail, formatMail } = require("./mail");
-const { login, callback, postTweet, refreshToken, pushTweetToTwitter } = require("./handlers");
+const { pushTweetToTwitter } = require("./handlers");
 
 const KEY = "news";
 const port = process.env.PORT || 8080;
@@ -54,28 +53,12 @@ const getTrendingNews = async () => {
   }
 };
 
-app.use(
-  cookieSession({
-    name: "session",
-    keys: [process.env.SECRET],
-    // maxAge: 24 * 60 * 60 * 1000, // 24 hours
-  })
-);
-
 app.get("/", (_req, res) => {
   console.log("app is running: ping");
   res.send("App is running");
 });
 
-app.get("/login", login);
-
-app.get("/callback", callback);
-
-app.get("/post_tweet", postTweet);
-
-app.get("/refresh", refreshToken);
-
-app.get("/getTrendingNews", getTrendingNews);
+app.get("/get-news", getTrendingNews);
 
 app.listen(port, () => {
   console.log(`app listening on port ${port}`);

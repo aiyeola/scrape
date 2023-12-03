@@ -4,11 +4,6 @@ const URL = process.env.CRAWL_URL;
 
 const crawlData = async () => {
   const browser = await puppeteer.launch({ headless: "new" });
-  // const browser = await puppeteer.launch({
-  //   // headless: "false",
-  //   // args: ["--no-sandbox"],
-  //   // executablePath: "google-chrome-stable",
-  // });
 
   const page = await browser.newPage();
   await page.goto(URL, { timeout: 0 });
