@@ -31,6 +31,10 @@ const getTrendingNews = async () => {
 
     const news = await crawlData();
 
+    if (news?.length === 0) {
+      return;
+    }
+
     const value = await client.get(KEY);
 
     await client.set(KEY, JSON.stringify(news));
